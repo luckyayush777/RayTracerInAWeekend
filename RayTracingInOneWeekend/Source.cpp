@@ -20,6 +20,6 @@ int main()
 
 		}
 	}
-	std::cerr << "\ndone!.\n";
+	std::cerr << "\nDone!.\n";
 	return 0;
 }
