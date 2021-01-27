@@ -50,6 +50,46 @@ public :
 		return std::sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);
 	}
 
+	friend inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
+	{
+		return out << v.e[0] << " " << v.e[1] << v.e[2];
+	}
+
+	friend inline Vec3 operator+(const Vec3& v1, const Vec3& v2)
+	{
+		return Vec3(v1.e[0] + v2.e[0] , v1.e[1] + v2.e[1] , v2.e[2] + v2.e[2]);
+	}
+
+	friend inline Vec3 operator- (const Vec3& v1, const Vec3& v2)
+	{
+		return Vec3(v1.e[0] - v2.e[0], v1.e[0] - v2.e[0], v1.e[2] - v1.e[2]);
+	}
+
+	friend inline Vec3 operator* (const Vec3& v1, const Vec3& v2)
+	{
+		return Vec3(v1.e[0] * v2.e[0], v1.e[1] * v2.e[1], v1.e[2] * v2.e[2]);
+	}
+
+	friend inline Vec3 operator* (const double scalarMultiplier, const Vec3& v)
+	{
+		return Vec3(scalarMultiplier * v.e[0], scalarMultiplier * v.e[1], scalarMultiplier * v.e[2]);
+	}
+
+	friend inline Vec3 operator* (const Vec3& v, const double scalarMultiplier)
+	{
+		return scalarMultiplier * v;
+	}
+
+	friend inline Vec3 operator/ (const double scalarMultiplier, const Vec3& v)
+	{
+		return (1 / scalarMultiplier) * v;
+	}
+
+	friend inline double dot(const Vec3& v1, const Vec3& v2)
+	{
+		return (v1.e[0] + v2.e[0] + v1.e[1] + v2.e[1] + v1.e[2] + v1.e[2]);
+	}
+
 };
 
 using point3 = Vec3;
