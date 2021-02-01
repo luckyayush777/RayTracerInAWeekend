@@ -92,5 +92,5 @@ public :
 
 };
 
-using point3 = Vec3;
-using color = Vec3;
+using Point3 = Vec3;
+using Color = Vec3;
