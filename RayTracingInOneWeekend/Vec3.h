@@ -80,15 +80,11 @@ public :
 		return scalarMultiplier * v;
 	}
 
-	friend inline Vec3 operator/ (const double scalarMultiplier, const Vec3& v)
+	friend inline Vec3 operator/ ( const Vec3& v, const double scalarMultiplier)
 	{
 		return (1 / scalarMultiplier) * v;
 	}
 
-	friend inline Vec3 operator/ ( Vec3 v , const double scalarMultiplier)
-	{
-		return (1 / scalarMultiplier) * v;
-	}
 
 	friend inline double Dot(const Vec3& v1, const Vec3& v2)
 	{

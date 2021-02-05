@@ -17,8 +17,8 @@ int main()
 	// IMAGE
 
 	const auto aspectRatio = 16.0 / 9.0;
-	const int imageWidth = 400;
-	const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
+	const int imageHeight = 400;
+	const int imageWidth = static_cast<int>(imageHeight / aspectRatio);
 
 	//CAMERA
 
@@ -33,16 +33,16 @@ int main()
 
 	//RENDER
 
-	std::cout << "P3\n" << imageWidth << " " << imageHeight << "\n255\n";
+	std::cout << "P3\n" << imageHeight << " " << imageWidth << "\n255\n";
 
-	for (int j = imageHeight - 1; j >= 0; --j)
+	for (int j = imageWidth - 1; j >= 0; --j)
 	{
 		std::cerr << "\rScanlines Remaining" << j << ' ' << std::flush;
-		for (int i = 0; i < imageWidth; ++i)
+		for (int i = 0; i < imageHeight; ++i)
 		{
-			auto u = double(i) / (double(imageWidth)- 1);
-			auto v = double(j) / (double(imageHeight) - 1);
-			Ray r(origin, lowerLeftCorner + u * horizontal + v * vertical - origin);
+			auto v = double(i) / (imageHeight- 1);
+			auto u = double(j) / (imageWidth - 1);
+			Ray r(origin, lowerLeftCorner + v * vertical + u * horizontal - origin);
 			Color pixelColor = RayColor(r);
 			WriteColor(std::cout, pixelColor);
 		}
