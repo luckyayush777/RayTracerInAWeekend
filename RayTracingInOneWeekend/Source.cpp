@@ -4,27 +4,34 @@
 
 
 #include<iostream>
-
-bool HitSphere(const Point3& center, double radius, const Ray& ray)
+double HitSphere(const Point3& center, double radius, const Ray& ray)
 {
 	Vec3 oc = ray.OriginPoint() - center;
 	auto a = dot(ray.DirectionVector(), ray.DirectionVector());
 	auto b = 2 * dot(oc, ray.DirectionVector());
 	auto c = dot(oc, oc) - radius * radius;
 	auto discriminant = b * b - 4 * a * c;
-	if (discriminant > 0)
-		return true;
-	else return false;
+	if (discriminant < 0)
+		return -1.0;
+	else
+	{
+		return (-b - sqrt(discriminant)) / (2.0 * a);
+	}
+	
 }
 
 Color RayColor(const Ray& ray)
 {
-	if (HitSphere(Point3(0, 0, -1), 0.5, ray))
-		return Color(1.0, 0.0, 0.0);
+	auto t = (HitSphere(Point3(0, 0, -1), 0.5, ray));
+	if (t > 0.0)
+	{
+		Vec3 N = unit_vector(ray.At(t) - Vec3(0, 0, -1));
+		return 0.5 * Color(N.x() + 1, N.y() + 1,  N.z() + 1);
+	}
 
 
 	Vec3 unitDirection = unit_vector(ray.DirectionVector());
-	auto t = 0.5 * (unitDirection.y() + 1.0);
+	t = 0.5 * (unitDirection.y() + 1.0);
 	return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
 
