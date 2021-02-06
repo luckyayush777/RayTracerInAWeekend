@@ -3,105 +3,92 @@
 #include<iostream>
 
 class Vec3 {
-public :
-	double e[3];
+public:
+    double e[3];
 
-	Vec3() : e{ 0 , 0 , 0 } {};
-	Vec3(double e1, double e2, double e3) : e{ e1, e2, e3 } {};
+public:
+    Vec3() : e{ 0,0,0 } {}
+    Vec3(double e0, double e1, double e2) : e{ e0, e1, e2 } {}
 
-	double X() const
-	{
-		return e[0];
-	}
+    double x() const { return e[0]; }
+    double y() const { return e[1]; }
+    double z() const { return e[2]; }
 
-	double Y() const
-	{
-		return e[1];
-	}
+    Vec3 operator-() const { return Vec3(-e[0], -e[1], -e[2]); }
+    double operator[](int i) const { return e[i]; }
+    double& operator[](int i) { return e[i]; }
 
-	double Z() const
-	{
-		return e[2];
-	}
+    Vec3& operator+=(const Vec3& v) {
+        e[0] += v.e[0];
+        e[1] += v.e[1];
+        e[2] += v.e[2];
+        return *this;
+    }
 
-	Vec3& operator+=(const Vec3& v)
-	{
-		e[0] += v.e[0];
-		e[1] += v.e[1];
-		e[2] += v.e[2];
-		return *this;
-	}
+    Vec3& operator*=(const double t) {
+        e[0] *= t;
+        e[1] *= t;
+        e[2] *= t;
+        return *this;
+    }
 
-	Vec3& operator *= (const double scalarMultiplier)
-	{
-		e[0] *= scalarMultiplier;
-		e[1] *= scalarMultiplier;
-		e[2] *= scalarMultiplier;
-		return *this;
-	}
+    Vec3& operator/=(const double t) {
+        return *this *= 1 / t;
+    }
 
-	Vec3& operator /= (const double scalarDivider)
-	{
-		return *this *= 1 / scalarDivider;
-	}
+    double length() const {
+        return sqrt(length_squared());
+    }
 
-	double Length() const 
-	{
-		return std::sqrt(e[0] * e[0] + e[1] * e[1] + e[2] * e[2]);
-	}
+    double length_squared() const {
+        return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
+    }
 
-	friend inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
-	{
-		return out << v.e[0] << " " << v.e[1] << v.e[2];
-	}
+    friend inline std::ostream& operator<<(std::ostream& out, const Vec3& v) {
+        return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
+    }
 
-	friend inline Vec3 operator+(const Vec3& v1, const Vec3& v2)
-	{
-		return Vec3(v1.e[0] + v2.e[0] , v1.e[1] + v2.e[1] , v1.e[2] + v2.e[2]);
-	}
+    friend inline Vec3 operator+(const Vec3& u, const Vec3& v) {
+        return Vec3(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
+    }
 
-	friend inline Vec3 operator- (const Vec3& v1, const Vec3& v2)
-	{
-		return Vec3(v1.e[0] - v2.e[0], v1.e[0] - v2.e[0], v1.e[2] - v2.e[2]);
-	}
+    friend inline Vec3 operator-(const Vec3& u, const Vec3& v) {
+        return Vec3(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
+    }
 
-	friend inline Vec3 operator* (const Vec3& v1, const Vec3& v2)
-	{
-		return Vec3(v1.e[0] * v2.e[0], v1.e[1] * v2.e[1], v1.e[2] * v2.e[2]);
-	}
+    friend inline Vec3 operator*(const Vec3& u, const Vec3& v) {
+        return Vec3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
+    }
 
-	friend inline Vec3 operator* (const double scalarMultiplier, const Vec3& v)
-	{
-		return Vec3(scalarMultiplier * v.e[0], scalarMultiplier * v.e[1], scalarMultiplier * v.e[2]);
-	}
+    friend inline Vec3 operator*(double t, const Vec3& v) {
+        return Vec3(t * v.e[0], t * v.e[1], t * v.e[2]);
+    }
 
-	friend inline Vec3 operator* (const Vec3& v, const double scalarMultiplier)
-	{
-		return scalarMultiplier * v;
-	}
+    friend inline Vec3 operator*(const Vec3& v, double t) {
+        return t * v;
+    }
 
-	friend inline Vec3 operator/ ( const Vec3& v, const double scalarMultiplier)
-	{
-		return (1 / scalarMultiplier) * v;
-	}
+    friend inline Vec3 operator/(Vec3 v, double t) {
+        return (1 / t) * v;
+    }
+
+    friend inline double dot(const Vec3& u, const Vec3& v) {
+        return u.e[0] * v.e[0]
+            + u.e[1] * v.e[1]
+            + u.e[2] * v.e[2];
+    }
+
+    friend inline Vec3 cross(const Vec3& u, const Vec3& v) {
+        return Vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
+            u.e[2] * v.e[0] - u.e[0] * v.e[2],
+            u.e[0] * v.e[1] - u.e[1] * v.e[0]);
+    }
+
+    friend inline Vec3 unit_vector(Vec3 v) {
+        return v / v.length();
+    }
 
 
-	friend inline double Dot(const Vec3& v1, const Vec3& v2)
-	{
-		return (v1.e[0] + v2.e[0] + v1.e[1] + v2.e[1] + v1.e[2] + v1.e[2]);
-	}
-
-	friend inline Vec3 Cross(const Vec3& v1, const Vec3& v2)
-	{
-		return Vec3(v1.e[1] * v2.e[2] - v1.e[2] * v2.e[1],
-			v1.e[2] * v2.e[0] - v1.e[0] * v2.e[2],
-			v1.e[0] * v2.e[1] - v1.e[1] * v2.e[0]);
-	}
-
-	friend inline Vec3 UnitVector(Vec3 vector)
-	{
-		return vector / vector.Length();
-	}
 
 };
 
