@@ -142,11 +142,14 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Hittable.h" />
+    <ClInclude Include="HittableList.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="RtWeekend.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="HittableList.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sphere.cpp" />
   </ItemGroup>

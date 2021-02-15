@@ -1,37 +1,26 @@
-#include"Vec3.h"
+#include"RtWeekend.h"
+
 #include"Color.h"
-#include"Ray.h"
+#include"HittableList.h"
+#include"Sphere.h"
 
 
 #include<iostream>
-double HitSphere(const Point3& center, double radius, const Ray& ray)
-{
-	Vec3 oc = ray.OriginPoint() - center;
-	auto a = ray.DirectionVector().length_squared();
-	auto halfB = dot(oc, ray.DirectionVector());
-	auto c = oc.length_squared() - radius * radius;
-	auto discriminant = halfB * halfB - a * c;
-	if (discriminant < 0)
-		return -1.0;
-	else
-	{
-		return (-halfB - sqrt(discriminant)) /  a;
-	}
-	
-}
 
-Color RayColor(const Ray& ray)
-{
-	auto t = (HitSphere(Point3(0, 0, -1), 0.5, ray));
-	if (t > 0.0)
-	{
-		Vec3 N = unit_vector(ray.At(t) - Vec3(0, 0, -1));
-		return 0.5 * Color(N.x() + 1, N.y() + 1,  N.z() + 1);
-	}
 
+Color RayColor(const Ray& ray, const Hittable& world)
+{
+	HitRecord hitRecord;
+
+	if (world.hit(ray, 0, infinity, hitRecord))
+	{
+		return 0.5 * (hitRecord.normal + Color(1, 1, 1));
+	}
 
 	Vec3 unitDirection = unit_vector(ray.DirectionVector());
-	t = 0.5 * (unitDirection.y() + 1.0);
+
+	auto t = 0.5 * (unitDirection.y() + 1.0);
+
 	return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
 
@@ -44,6 +33,12 @@ int main()
 	const auto aspectRatio = 16.0 / 9.0;
 	const int imageWidth = 400;
 	const int imageHeight = static_cast<int>(imageWidth/ aspectRatio);
+
+	//WORLD
+
+	HittableList world;
+	world.Add(std::make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+	world.Add(std::make_shared<Sphere>(Point3(0, -100.5, -1), 100));
 
 	//CAMERA
 
@@ -68,7 +63,7 @@ int main()
 			auto v = double(i) / (imageWidth- 1);
 			auto u = double(j) / (imageHeight - 1);
 			Ray r(origin, lowerLeftCorner + u * vertical + v * horizontal  - origin);
-			Color pixelColor = RayColor(r);
+			Color pixelColor = RayColor(r, world);
 			WriteColor(std::cout, pixelColor);
 		}
 	}
